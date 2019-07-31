@@ -1,11 +1,11 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
-
+from pathlib import Path
 import json
 import argparse
 import requests
 import platform
-
+from inspect import getsourcefile
 DATE_FORMAT = '%Y-%m-%d'
 
 class Structure:
@@ -65,7 +65,9 @@ def get_counter_creation_date(counter_id, token):
 
 def get_config():
     '''Returns user config'''
-    with open('./configs/config.json') as input_file:
+    script_path=Path(getsourcefile(lambda:0)).resolve().parent
+    config_file=script_path / "configs/config.json"
+    with open(str(config_file)) as input_file:
         config = json.loads(input_file.read())
 
     assert 'counter_id' in config, 'CounterID must be specified in config'
